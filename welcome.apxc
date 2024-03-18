@@ -1,0 +1,20 @@
+public static void youDoThisPart() {
+        /*Your assignment is to write two comments below this one.  They should describe the few lines of code you se below.
+		    Simply describe what the code is doing based on what you learned from readings and in class.
+        Make one as a single line comment using the // notation.  Make the other one a multi line comment using the /* notation.
+        When you're done, save this file so that it is compiled and stored in Salesforce.  */
+
+		Integer i;
+			
+      //this has created the variable Integer i, but has not assigned a value because it is missing the = sign and a value as in below
+		
+		i = 2;
+        
+			/* 
+			code above - this is assigning the value of 2 to the "i" variable
+		 	code below - this is assigning the string variable s the value of 'My String' 
+			*/
+        
+		String s = 'My String';
+
+    }
