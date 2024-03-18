@@ -1,0 +1,41 @@
+Wash & Dry Zoë's Laundry:
+
+Get empty hamper from my closet
+Take hamper into Zo's room
+Look under Zo's bed and put any dirty clothing into hamper
+Look in Zo's closet and put any dirty clothing into hamper
+Look on Zo's hammock chair and put any dirty clothing into hamper
+Empty Zo's own small hamper, if applicable, into the larger hamper.
+Ask Zo if there is any other clothing in her room that needs washing.
+Take hamper with dirty clothing downstairs.
+Stop in the living room.
+Look for clothes and put any dirty clothing into hamper.
+Take hamper full of clothing into the laundry room.
+Put hamper on floor. 
+Separate clothing from hamper into two piles: 1 is light colored clothing, the other is dark colored clothing.
+Empty the washer if there are any clothes in it. 
+If there were clothes in the washer, put them in the now empty hamper and remember to deal with those after we start this load of laundry.
+Put into the washer one of the piles of clothing.
+Close the washer door.
+Open the washer drawer on the top left of washer
+Pour detergent into the detergent bay of the drawer
+Close the drawer
+Turn on the washer by pressing the power button
+Select 'eco cold' for the water temperature.
+Press the start button. 
+Set a timer for the amount of time the washer indicates on my watch so I don't forget to get these out of the washer when it is time. 
+When time is up, open the dryer door. 
+Open the washer door
+Take clothes out of the washer and put directly into the open dryer. 
+Close the washer door.
+Grab a bounce sheet.
+Put the bounce sheet into the dryer with the clean wet clothes.
+Close the dryer door. 
+Depress the power button on the dryer to turn it on. 
+Depress button for anti-static.
+Depress the the dry button twice for highest level of drying.
+Set the dryer air temperature to medium.
+Depress the the start button.
+Forget there are clothes in the dryer until Zo is looking for clean shorts or jeans.
+
+//might consider chunking this out: gather laundry; wash laundry; dry laundry. 
