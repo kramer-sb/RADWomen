@@ -1,0 +1,76 @@
+//Use these a piece at a time, uncommenting the multi line comments but only one at a time unless noted
+
+//Declare the groceries list
+/*
+List<String> groceries = new List<String>(); 
+  
+//The output for this statement is an empty list, ().
+System.debug('Groceries Value: ' + groceries); 
+*/
+
+/*
+String[] groceries = new String[4];
+System.debug('Initialized groceries: ' + groceries);
+  
+System.debug('Item 0: ' + groceries[0]);
+*/
+
+//There are two ways to add items to a list:
+
+/*
+//Sets the first item in the list to 'Tea'
+List<String> groceries = new List<String>{'Tea'}; 
+*/
+
+*/
+List<String> groceries = new List<String>();
+groceries.add('Tea');
+/*
+
+//declare and initialize a list
+
+/*
+//Declare the groceries list
+List<String> groceries = new List<String>{'Tea','Sugar','Honey','Milk'};
+  
+//The output for this statement is Tea, Sugar, Honey, Milk
+System.debug('Groceries: ' + groceries);
+*/
+
+//Declare an Empty List and Add Values Later
+
+/*
+//Create the groceries list
+List<String> groceries = new List<String>();
+  
+//The output for this statement is null
+System.debug('Groceries: ' + groceries);
+  
+//Use the add method to add an element to the list
+groceries.add('Tea');
+groceries.add('Sugar');
+groceries.add('Honey');
+groceries.add(2, 'Milk');
+  
+//The output for this statement is Tea, Sugar, Milk, Honey
+System.debug('Groceries: ' + groceries);
+
+*/
+
+
+//Different ways of adding items to a list produce slightly different results; sometimes unexpected results.
+
+/*
+String[] groceries = new String[4];
+System.debug('Groceries: ' + groceries);
+  
+groceries.add('Tea');
+groceries.add('Sugar');
+System.debug('Added 2 items: ' + groceries);
+  
+groceries.add(1, 'Honey');
+System.debug('Added Honey in index 1: ' + groceries);
+  
+System.debug('Item 0: ' + groceries[0]);
+
+*/
