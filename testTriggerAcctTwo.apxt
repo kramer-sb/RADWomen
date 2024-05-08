@@ -1,0 +1,5 @@
+//new trigger to illustrate the debug 
+trigger testTriggerAcctTwo on Account (before insert) {
+    if(trigger.isBefore && trigger.isInsert)
+	System.debug('inside before insert event');
+}
