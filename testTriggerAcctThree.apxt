@@ -1,0 +1,39 @@
+//Whenever Account's phone field is updated then all related contact's phone field should also get updated with parent account's phone. 
+trigger testTriggerAcctThree on Account (after Update) 
+{
+    //this code should only execute after Update event:
+    Map<Id,Account> accMap = new Map<Id,Account>();
+    if(trigger.isAfter && trigger.isUpdate)
+    {
+        
+        if(!trigger.new.isEmpty())
+        {
+        
+        	//if the above is true then this will execute:
+        	for(Account acc : trigger.new)
+        	{
+            //apply a check that the user entered value is not equal to the existing field value 
+            	if(trigger.oldMap.get(acc.Id).Phone != acc.Phone)
+            	{
+					accMap.put(acc.Id,acc);
+            	}	
+        	}
+    	}
+	}
+    
+    List<Contact> conList = [SELECT Id, AccountId, Phone FROM Contact WHERE AccountId IN:accMap.keySet() ];
+    List<Contact> listToUpdateContacts = new List<Contact>();
+    
+    if(!conList.isEmpty())
+    {
+        for(Contact con : conList)
+        {
+            con.Phone = accMap.get(con.AccountId).Phone;
+            listToUpdateContacts.add(con);
+        }
+    }
+   if(!listToUpdateContacts.isEmpty())
+   {
+       update listToUpdateContacts;
+   }
+}
