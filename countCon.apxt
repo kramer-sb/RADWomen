@@ -1,0 +1,75 @@
+trigger countCon on Contact (after insert, after Update, after Delete, after Undelete) 
+{
+	Set<Id> accIds = new Set<Id>(); //set to store parent account Ids of contacts
+    
+    if(trigger.isAfter && (trigger.isInsert || trigger.isUndelete))
+    {
+        if(!trigger.new.isEmpty())
+        {
+            for(Contact con : trigger.new)
+            {
+                if(con.AccountId != null)
+                {
+                    accIds.add(con.AccountId);
+                }
+            }
+        }
+    }
+    if(trigger.isAfter && trigger.isUpdate)
+    {
+        //fetch id of new parent account and old parent account
+        if(!trigger.new.isEmpty())
+        {
+            for(Contact con: trigger.new)
+                
+            {//if this new parent ID does not equal the old parent ID
+                if(con.AccountId != trigger.oldMap.get(con.Id).AccountId)
+                {//and if the old parent id is not null
+                    if(trigger.oldMap.get(con.Id).AccountId != null)
+                    {
+                        //then set it
+                        accIds.add(trigger.oldMap.get(con.Id).AccountId);
+                    }
+                    if(con.AccountId != null)
+                    {
+                        accIds.add(con.AccountId);
+                    }
+                }
+            }
+        }
+            
+    }
+    if(trigger.isAfter && trigger.isDelete)
+    {
+        if(!trigger.old.isEmpty())
+        {
+            for(Contact con : trigger.old)
+            {
+                if(con.AccountId != null)
+                {
+                    accIds.add(con.AccountId);
+                }
+            }
+        }
+    }
+    
+    if(!accIds.isEmpty())
+    {
+        //runs only if it finds a value
+        //fetch account records
+        List<Account> accList = [SELECT Id, Number_of_Contacts__c,(SELECT Id from Contacts) FROM Account WHERE Id IN: accIds];
+        List<Account> accountsToBeUpdated = new List<Account>();
+        if(!accList.isEmpty())
+        {
+            for(Account acc : accList)
+            {
+                acc.Number_of_Contacts__c = acc.Contacts.size();
+                accountsToBeUpdated.add(acc);
+            }
+        }
+    if(!accountsToBeUpdated.isEmpty())
+    {
+        update accountsToBeUpdated;
+    }
+    }
+}
