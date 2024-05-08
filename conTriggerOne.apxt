@@ -1,0 +1,40 @@
+//whenever a contact's description is updated then its parent account desc should also be updated
+
+trigger conTriggerOne on Contact (after Update) 
+{
+	Set<Id> accIds = new Set<Id>();
+    if(trigger.isAfter && trigger.isUpdate)
+    {
+        //this is only executed if above is true
+        if(!trigger.new.isEmpty())
+        {
+            for(Contact con : trigger.new)
+            {
+                if(con.AccountId !=null && trigger.oldMap.get(con.Id).Description != con.Description)
+                {
+                    accIds.add(con.AccountId);
+                }
+            }
+        }
+    }
+    
+    //we have to fetch account data now
+    Map<Id,Account> accMap = new Map<Id, Account>([SELECT Id, Description FROM Account WHERE ID IN : accIds]);
+    List<Account> listToBeUpdated = new List<Account>();
+    //another null check
+    if(!trigger.new.isEmpty())
+    {
+        //now we're feathing Contacts updated data
+        for(Contact cont : trigger.new)
+        {
+            Account acc = accMap.get(cont.AccountId);
+            acc.Description = cont.Description;
+            listToBeUpdated.add(acc);
+        }
+    }
+    
+    if(!listToBeUpdated.isEmpty())
+    {
+        update listToBeUpdated;
+    }
+}
