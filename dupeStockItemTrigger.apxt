@@ -1,0 +1,41 @@
+trigger dupeStockItemTrigger on Stock_Item__c (before insert, before Update) 
+{
+	Set<String> stockItemNames = new Set<String>();
+    
+        //check to make sure trigger is before insert or update
+        if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate))
+        {
+            if(!trigger.new.isEmpty())
+            {
+                for(Stock_Item__c si : trigger.new)
+                {
+                    stockItemNames.add(si.Item_Name__c);
+                }
+            }
+        }
+    //fetch all item names whose names are in the set and put them in a map
+    List<Stock_Item__c> siList = [SELECT Id, Item_Name__c FROM Stock_Item__c WHERE Item_Name__c IN : stockItemNames];
+
+	Map<String, Stock_Item__c> existingSIMap = new Map<String, Stock_Item__c>();
+    
+    if(!siList.isEmpty())
+    {
+        for(Stock_Item__c sIt : siList)
+        {
+            existingSIMap.put(sIt.Item_Name__c,sIt);
+        }
+        
+        if(!trigger.new.isEmpty())
+        {
+            for(Stock_Item__c siObj : trigger.new)
+            {
+                //if it contains a name that already exists
+                if(existingSIMap.containsKey(siObj.Item_Name__c))
+                {
+                    //then it shows the error:
+                    siObj.addError('This Stock Item already exists; please choose a different Item Name or edit the existing record to meet your needs.');
+                }
+            }
+        }
+    }
+}
