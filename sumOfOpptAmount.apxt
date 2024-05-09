@@ -1,0 +1,74 @@
+trigger sumOfOpptAmount on Opportunity (after insert, after update, after delete, after undelete) 
+{
+	Set<Id> accIds = new Set<Id>();
+    
+    if(trigger.isAfter && (trigger.isInsert || trigger.isUndelete))
+    {
+     	if(!trigger.new.isEmpty())
+     	{
+         for(Opportunity op : trigger.new)
+        	{
+             if(op.AccountId != null)
+             	{
+                 accIds.add(op.AccountId);
+             	}
+         	}
+     	}
+    }
+    if(trigger.isAfter && trigger.isUpdate)
+    {
+        if(!trigger.new.isEmpty())
+        {
+            for(Opportunity op : trigger.new)
+            {
+                if(op.AccountId != trigger.oldMap.get(op.Id).AccountId)
+                {//this gets executed whenever we change the parent of an opportunity record 
+                    accIds.add(op.AccountId);
+                    accIds.add(trigger.oldMap.get(op.Id).AccountId);
+                }
+                //whenever we update an amount of the opp record w/o changing its parent:
+                else
+                {//this will be executed
+                    accIds.add(op.AccountId);
+                }
+            }
+        }
+    }
+    //only the delete operation is left
+		if(trigger.isAfter && trigger.isDelete)
+        {
+            if(!trigger.old.isEmpty())
+            {
+                for(Opportunity op : trigger.old)
+                {
+                    if(op.AccountId != null)
+                    {
+                        accIds.add(op.AccountId);
+                    }
+                }
+            }
+        }
+    if(!accIds.isEmpty())
+    {
+		List<AggregateResult> aggrList = [SELECT AccountId ids, sum(Amount) totalAm 
+                                         FROM Opportunity
+                                         WHERE AccountId IN : accIds 
+                                         GROUP BY AccountId];
+        Map<Id,Account> accMap = new Map<Id,Account>();
+        
+        if(!aggrList.isEmpty())
+        {
+            for(AggregateResult aggr : aggrList)
+            {
+                Account acc = new Account();
+                acc.Id = (Id)aggr.get('ids');
+                acc.Total_Opp_Amount__c = (Decimal)aggr.get('totalAm');
+                accMap.put(acc.Id,acc);
+            }
+        }
+        if(!accMap.isEmpty())
+        {
+            update accMap.values();
+        }
+    }
+}
