@@ -1,0 +1,28 @@
+//trigger to create a related Contact of Account with same phone as Account phone if custom checkbox field on Account is triggered.
+trigger createRelatedCon on Account (after Insert, after Update) 
+
+{
+    List<Contact> listToInsertCon = new List<Contact>(); 
+	if(trigger.isAfter && (trigger.isInsert || trigger.isUpdate))
+    {
+        if(!trigger.new.isEmpty())
+        {
+            for(Account ac : trigger.new)
+            {
+                if(ac.Create_Contact_Checkbox__c == true)
+                {
+                    Contact con = new Contact();
+                    con.FirstName = 'Test';
+                    con.LastName = ac.Name;
+                    con.AccountId = ac.Id;
+                    con.Phone = ac.Phone;
+                    listToInsertCon.add(con);
+                }
+            }
+        }
+        if(!listToInsertCon.isEmpty())
+        {
+            insert listToInsertCon;
+        }
+    }
+}
