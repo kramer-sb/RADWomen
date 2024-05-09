@@ -1,0 +1,41 @@
+trigger dupeAccTrigger on Account (before insert, before Update) 
+{
+	Set<String> accNames = new Set<String>();
+    
+        //check to make sure trigger is before insert or update
+        if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate))
+        {
+            if(!trigger.new.isEmpty())
+            {
+                for(Account ac : trigger.new)
+                {
+                    accNames.add(ac.Name);
+                }
+            }
+        }
+    //fetch all accounts whose names are in the set and put them in a map
+    List<Account> accList = [SELECT Id, Name FROM Account WHERE Name IN : AccNames];
+
+	Map<String, Account> existingAccMap = new Map<String, Account>();
+    
+    if(!accList.isEmpty())
+    {
+        for(Account acct : accList)
+        {
+            existingAccMap.put(acct.Name,acct);
+        }
+        
+        if(!trigger.new.isEmpty())
+        {
+            for(Account accObj : trigger.new)
+            {
+                //if it contains a name that already exists
+                if(existingAccMap.containsKey(accObj.Name))
+                {
+                    //then it shows the error:
+                    accObj.addError('Account Name already exists; please change');
+                }
+            }
+        }
+    }
+}
