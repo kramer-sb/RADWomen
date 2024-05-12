@@ -1,11 +1,15 @@
 trigger dupeAccTrigger on Account (before insert, before Update) 
 {
+	//add  the name of the record that's being inserted or updated
+	//so we create a set
 	Set<String> accNames = new Set<String>();
     
-        //check to make sure trigger is before insert or update
+        //apply a check to make sure this executes before a insert or update
         if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate))
+		//the following code only executes if the above code = true
         {
-            if(!trigger.new.isEmpty())
+            //here we apply a null check over trigger new
+			if(!trigger.new.isEmpty())
             {
                 for(Account ac : trigger.new)
                 {
