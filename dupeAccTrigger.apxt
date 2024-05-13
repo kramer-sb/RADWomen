@@ -1,43 +1,31 @@
 trigger dupeAccTrigger on Account (before insert, before Update) 
 {
-	//add  the name of the record that's being inserted or updated
-	//so we create a set
-	Set<String> accNames = new Set<String>();
-    
-        //apply a check to make sure this executes before a insert or update
-        if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate))
-		//the following code only executes if the above code = true
+	Set<String> accNames = new Set<String>(); //so we create a set add  the name of the record that's being inserted or updated
+	if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate)) //apply a check to make sure this executes before a insert or update
         {
-            //here we apply a null check over trigger new
-			if(!trigger.new.isEmpty())
+		if(!trigger.new.isEmpty()) //Apply a null check over trigger new
             {
-                for(Account ac : trigger.new)
+			for(Account ac : trigger.new) //here's our loop to iterate over Accounts
                 {
-                    accNames.add(ac.Name);
+                accNames.add(ac.Name);//now we add the names of the Accounts being added or inserted
                 }
             }
         }
-    //fetch all accounts whose names are in the set and put them in a map
-    List<Account> accList = [SELECT Id, Name FROM Account WHERE Name IN : AccNames];
-
-	Map<String, Account> existingAccMap = new Map<String, Account>();
-    
-    if(!accList.isEmpty())
+    List<Account> accList = [SELECT Id, Name FROM Account WHERE Name IN : AccNames]; //fetch all accounts whose names are in the set 
+	Map<String, Account> existingAccMap = new Map<String, Account>(); //and we put them in a map
+    if(!accList.isEmpty()) //apply a null check over this list
     {
-        for(Account acct : accList)
+	for(Account acct : accList) //add our loop where we iterate over Accounts
         {
-            existingAccMap.put(acct.Name,acct);
+        existingAccMap.put(acct.Name,acct); //we put the name and account record inside the map
         }
-        
-        if(!trigger.new.isEmpty())
-        {
-            for(Account accObj : trigger.new)
+        if(!trigger.new.isEmpty()) //null check over trigger.new 
+        	{
+			for(Account accObj : trigger.new) //add our loop where we iterate over Accounts
             {
-                //if it contains a name that already exists
-                if(existingAccMap.containsKey(accObj.Name))
+                if(existingAccMap.containsKey(accObj.Name)) //if Map contains a name that already exists
                 {
-                    //then it shows the error:
-                    accObj.addError('Account Name already exists; please change');
+                    accObj.addError('Account Name already exists; please change'); //then it shows the error:
                 }
             }
         }
