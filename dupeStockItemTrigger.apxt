@@ -1,35 +1,34 @@
 trigger dupeStockItemTrigger on Stock_Item__c (before insert, before Update) 
 {
-	Set<String> stockItemNames = new Set<String>();
+	Set<String> stockItemNames = new Set<String>(); //so we create a set add  the name of the record that's being inserted or updated
     
         //check to make sure trigger is before insert or update
         if(trigger.isBefore && (trigger.isInsert || trigger.isUpdate))
         {
-            if(!trigger.new.isEmpty())
+            if(!trigger.new.isEmpty())//Apply a null check over trigger new
             {
-                for(Stock_Item__c si : trigger.new)
+                for(Stock_Item__c si : trigger.new)//here's our loop to iterate over Stock Items
                 {
-                    stockItemNames.add(si.Item_Name__c);
+                    stockItemNames.add(si.Item_Name__c);//now we add the names of the Accounts being added or inserted
                 }
             }
         }
     //fetch all item names whose names are in the set and put them in a map
-    List<Stock_Item__c> siList = [SELECT Id, Item_Name__c FROM Stock_Item__c WHERE Item_Name__c IN : stockItemNames];
-
-	Map<String, Stock_Item__c> existingSIMap = new Map<String, Stock_Item__c>();
+    List<Stock_Item__c> siList = [SELECT Id, Item_Name__c FROM Stock_Item__c WHERE Item_Name__c IN : stockItemNames]; //fetch all accounts whose names are in the set 
+	Map<String, Stock_Item__c> existingSIMap = new Map<String, Stock_Item__c>(); //and we put them in a map
     
-    if(!siList.isEmpty())
+    if(!siList.isEmpty()) //apply a null check over this list
     {
-        for(Stock_Item__c sIt : siList)
+        for(Stock_Item__c sIt : siList) //add our loop where we iterate over Stock Items
         {
-            existingSIMap.put(sIt.Item_Name__c,sIt);
+            existingSIMap.put(sIt.Item_Name__c,sIt); //we put the name and account record inside the map
         }
         
-        if(!trigger.new.isEmpty())
+        if(!trigger.new.isEmpty()) //null check over trigger.new
         {
-            for(Stock_Item__c siObj : trigger.new)
+            for(Stock_Item__c siObj : trigger.new) //null check over trigger.new
             {
-                //if it contains a name that already exists
+                //if it contains a name that already exists //if Map contains a name that already exists
                 if(existingSIMap.containsKey(siObj.Item_Name__c))
                 {
                     //then it shows the error:
